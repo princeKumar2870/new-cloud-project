@@ -24,6 +24,7 @@ const registerUser = async (req,res)=>{
 
 const loginUser = async (req,res)=>{
     try{
+        console.log(req.body)
         const {email,password} = req.body;
         const user  = await User.findOne({email});
         if(!user) return res.status(400).json({error: " Invalid Credentials"});
@@ -43,4 +44,16 @@ const loginUser = async (req,res)=>{
         return res.status(500).json({error: err.message})
     }
 }
-module.exports = {registerUser,loginUser}
+
+const getMe = async (req,res)=>{
+    try{
+        const id = req.user.id;
+        const user = await User.findOne({_id: id}).select('-password')
+        if(!user) res.status(404).json({error: "user not present"})
+        res.status(201).json({user})
+    }catch(err){
+        console.error("Error in fetching profile",err);
+        return res.status(500).json({error: "Internal Server error"})
+    }
+}
+module.exports = {registerUser,loginUser,getMe}

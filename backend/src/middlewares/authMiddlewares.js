@@ -23,7 +23,7 @@ const restrictTo = (...roles)=>{
         if(roles.includes(req.user.role)){
             next()
         }else{
-            res.staus(403).json({error: "you are not authorized for this action"})
+            res.status(403).json({error: "you are not authorized for this action"})
         }
     }
 }
